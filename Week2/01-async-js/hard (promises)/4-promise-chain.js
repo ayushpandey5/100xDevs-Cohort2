@@ -41,6 +41,12 @@ function calculateTime(t1, t2, t3) {
             });
         });
     });
+
+    // return wait1(t1).then(() => wait2(t2)).then(() => wait3(t3)).then(() => {
+    //     const timeNow = Date.now();
+    //     return timeNow - time;
+    // });
+    
 }
 
 //Async await way
