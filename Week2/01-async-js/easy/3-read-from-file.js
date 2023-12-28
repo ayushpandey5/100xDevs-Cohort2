@@ -5,26 +5,40 @@
 // Try to do an expensive operation below the file read and see how it affects the output. 
 // Make the expensive operation more and more expensive and see how it affects the output.
 
-const fs = require('fs');
+ const fs = require('fs');
 
-function readFile(filepath){
-    fs.readFile(filepath,'utf8',(err, data) => {
+function readFileCallback(filepath){
+    fs.readFile(filepath,'utf8',function (err, data) {
         if (err) {
             console.error(`Error ${err}`)
             return
         }
         console.log("File content: ")
         console.log(data)
-
-        for (let i = 0; i < 10000000000; i++) {
-            // This loop is intentionally made to be time-consuming
-        }
-        console.log('Expensive operation done.');
-
     })
+
+    console.log("outside readFile async function")
 }
 
-const filePath = './file.txt';
+ const filePath = './file.txt';
+readFileCallback(filePath);
 
-// Call the function to read the file and perform an expensive operation
-readFile(filePath);
+
+function readFilePromises(filePath){
+return new Promise(function(reject,resolve){
+    fs.readFile('file.txt', 'utf-8', function(err, data) {
+        if(err){
+            reject(new Error('Something went wrong'));
+        }
+        console.log("Promise resolved")
+        resolve(data)
+        
+    }) 
+})
+}
+
+function onDone(data){
+    console.log(data)
+}
+
+readFilePromises(filePath).then(onDone).catch(err => {console.error(err)})

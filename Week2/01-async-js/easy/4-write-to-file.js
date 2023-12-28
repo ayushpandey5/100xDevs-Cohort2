@@ -14,6 +14,19 @@ function writeFile(data){
     })
 }
 
-str = "Hello \t, I'm a new file \n asdasdasd \n asdasdada"
+str = "Hello, I'm a new file"
 
-writeFile(str)
+// writeFile(str)
+
+function writeFilePromise(data){
+    return new Promise(function(reject, resolve) {
+        fs.writeFile("promiseFile.txt", data, (err) => {
+            if (err){
+                reject(err)
+            }
+            resolve(data)
+        })
+    })
+}
+
+writeFilePromise(str).then(data => {console.log("File created using Promise")}).catch(err => {console.error(err)})
