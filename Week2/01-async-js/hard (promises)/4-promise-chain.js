@@ -29,6 +29,7 @@ function wait3(t) {
     })
 }
 
+//Promise way
 function calculateTime(t1, t2, t3) {
     const time = Date.now()
 
@@ -42,6 +43,7 @@ function calculateTime(t1, t2, t3) {
     });
 }
 
+//Async await way
 async function calculateTimeawait(t1,t2,t3){
     const time = Date.now()
     await wait1(t1)
