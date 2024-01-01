@@ -41,24 +41,10 @@
  */
 const express = require("express");
 const bodyParser = require("body-parser");
-const path = require("path");
-const { readdir, readFile, writeFile } = require("fs/promises");
 
 const app = express();
 
-const filePath = path.join(__dirname, "todos.json");
 let todos = [];
-
-async function readTodos() {
-  try {
-    const todo = await readFile(filePath, "utf-8");
-    todos = JSON.parse(todo);
-  } catch (error) {
-    console.error("Error reading todos file:", error);
-  }
-}
-
-readTodos();
 
 app.use(bodyParser.json());
 
@@ -67,21 +53,20 @@ app.get("/todos", async (req, res) => {
   try {
     return res.status(200).json(todos);
   } catch (error) {
-    console.error("Error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// Get few todos that match the id
+// Get todos that match the id
 app.get("/todos/:id", async (req, res) => {
   try {
-    const todoByID = todos.find((file) => file.id === req.params.id);
-    if (todoByID === undefined) {
-      return res.status(404).json({ error: "Todo not found" });
+    let todoByID = todos.find((file) => file.id === parseInt(req.params.id));
+    if (!todoByID) {
+      res.status(404).json({ error: "Todo not found" });
     }
-    return res.status(200).json(todoByID);
+    res.status(200).json(todoByID);
   } catch (error) {
-    return res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -95,8 +80,7 @@ app.post("/todos", async (req, res) => {
       description: req.body.description,
     };
     todos.push(todo);
-    await writeFile(filePath, JSON.stringify(todos));
-    res.status(201).json({ message: `Created todo with the ID: ${todo.id}` });
+    res.status(201).json(todo);
   } catch (error) {
     return res.status(500).json({ error: error });
   }
@@ -106,16 +90,12 @@ app.put("/todos/:id", async (req, res) => {
   try {
     const todoByID = todos.find((todo) => todo.id === parseInt(req.params.id));
     if (todoByID == undefined) {
-      return res.status(404).json({ error: "Todo not found" });
+      return res.status(404).send({ error: "Todo not found" });
     }
     todoByID.title = req.body.title;
-    todoByID.completed = req.body.completed;
     todoByID.description = req.body.description;
 
-    await writeFile(filePath, JSON.stringify(todos));
-    res
-      .status(200)
-      .json({ message: `Updated todo with the ID: ${req.params.id}` });
+    res.status(200).send(todoByID);
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });
   }
@@ -129,8 +109,7 @@ app.delete("/todos/:id", async (req, res) => {
     if (index === -1) {
       return res.status(404).json({ error: "Todo not found" });
     }
-    const deletedTodo = todos.splice(index, 1)[0];
-    await writeFile(filePath, JSON.stringify(todos));
+    todos.splice(index, 1);
     return res.status(200).json({ message: `Deleted todo with ID` });
   } catch (error) {
     return res.status(500).json({ error: `Internal Server Error` });
