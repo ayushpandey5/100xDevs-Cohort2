@@ -12,26 +12,26 @@
     - For any other route not defined in the server return 404
     Testing the server - run `npm run test-fileServer` command in terminal
  */
+const { error } = require("console");
 const express = require("express");
-const fs = require("fs/promises");
+const fs = require("fs");
 const path = require("path");
 const app = express();
 
-const folderPath = path.join(__dirname, "files");
+const folderPath = path.join(__dirname, "./files/");
 
-app.get("/files", async (req, res) => {
-  try {
-    const DIR = path.join(__dirname, "files");
-    const files = await fs.readdir(DIR);
-    res.status(200).json({ files });
-  } catch (error) {
-    return response.status(500).json({ error: "Unable to Retrive Files" });
-  }
+app.get("/files", (req, res) => {
+  const files = fs.readdir(folderPath, (error, file) => {
+    if (error) {
+      return res.status(500).send("Internal Server Error");
+    }
+    return res.status(200).send(file);
+  });
 });
 
 app.get("/file/:filename", async (req, res) => {
   try {
-    const content = await fs.readFile(
+    const content = await fs.promises.readFile(
       `${folderPath}/${req.params.filename}`,
       "utf-8"
     );
