@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+
+async function getData() {
+    const data = await fetch('https://fakerapi.it/api/v1/persons')
+    const finalData = await data.json()
+    console.log(finalData)
+    document.querySelector('.data').innerHTML = finalData.data[0].firstname;
+}
+    
+</script>
+<body>
+    <h1>Fetch Data</h1>
+    <div class="data"></div>
+    <button onclick="getData()">Get Data</button>
+</body>
+</html>
