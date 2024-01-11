@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const userMiddleware = require("../middleware/user");
-const { User } = require("../db");
+const { User, Course } = require("../db");
 
 // User Routes
 router.post("/signup", async (req, res) => {
@@ -28,16 +28,34 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.get("/courses", (req, res) => {
-  // Implement listing all courses logic
+router.get("/courses", async (req, res) => {
+  const courses = await Course.find({});
+  res.status(201).json({ courses: courses });
 });
 
-router.post("/courses/:courseId", userMiddleware, (req, res) => {
-  // Implement course purchase logic
+router.post("/courses/:courseId", userMiddleware, async (req, res) => {
+  const courseId = req.params.courseId;
+  const username = req.headers.username;
+
+  const user = await User.updateOne(
+    { username: username },
+    { $addToSet: { purchasedCourse: courseId } }
+  );
+
+  return res.status(201).json({ message: "Course purchased successfully" });
 });
 
-router.get("/purchasedCourses", userMiddleware, (req, res) => {
-  // Implement fetching purchased courses logic
+router.get("/purchasedCourses", userMiddleware, async (req, res) => {
+  const user = await User.findOne({ username: username });
+  const courses = await Course.find({
+    _id: {
+      $in: user.purchasedCourses,
+    },
+  });
+
+  if (user) {
+    res.status(201).json({ purchasedCourses: user });
+  }
 });
 
 module.exports = router;
