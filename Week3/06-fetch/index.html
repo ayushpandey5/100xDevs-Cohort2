@@ -11,7 +11,7 @@ async function getData() {
     const data = await fetch('https://fakerapi.it/api/v1/persons')
     const finalData = await data.json()
     console.log(finalData)
-    document.querySelector('.data').innerHTML = finalData.data[0].firstname;
+    document.querySelector('.data').innerHTML = JSON.stringify(finalData);
 }
     
 </script>
