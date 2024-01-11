@@ -28,22 +28,31 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/courses", adminMiddleware, async (req, res) => {
-  const course = req.body;
-  try {
-    const newCourse = await Course.create(course);
+  const title = req.body.title;
+  const description = req.body.description;
+  const imageLink = req.body.imageLink;
+  const price = req.body.price;
 
-    res.status(201).json({
-      message: "Course created successfully",
-      courseId: newCourse._id,
-    });
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+  const newCourse = await Course.create({
+    title,
+    description,
+    imageLink,
+    price,
+  });
+  res.json({
+    message: "Course created successfully",
+    courseId: newCourse._id,
+  });
 });
 
 router.get("/courses", adminMiddleware, async (req, res) => {
-  const courses = Course.find({});
-  res.status(200).json({ courses: courses });
+  try {
+    const courses = await Course.find({}).lean();
+    res.status(200).json({ courses: courses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;

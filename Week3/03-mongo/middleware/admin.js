@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const { Admin } = require("../db/index");
 
 // Middleware for handling auth

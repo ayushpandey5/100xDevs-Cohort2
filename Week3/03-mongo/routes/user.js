@@ -2,6 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const userMiddleware = require("../middleware/user");
 const { User, Course } = require("../db");
+const { default: mongoose } = require("mongoose");
 
 // User Routes
 router.post("/signup", async (req, res) => {
@@ -30,32 +31,42 @@ router.post("/signup", async (req, res) => {
 
 router.get("/courses", async (req, res) => {
   const courses = await Course.find({});
-  res.status(201).json({ courses: courses });
+  res.status(200).json({ courses: courses });
 });
 
 router.post("/courses/:courseId", userMiddleware, async (req, res) => {
-  const courseId = req.params.courseId;
-  const username = req.headers.username;
+  try {
+    const courseId = req.params.courseId;
+    const username = req.headers.username;
 
-  const user = await User.updateOne(
-    { username: username },
-    { $addToSet: { purchasedCourse: courseId } }
-  );
+    const updatedUser = await User.findOneAndUpdate(
+      { username: username },
+      { $push: { purchesedCourses: courseId } }
+    );
 
-  return res.status(201).json({ message: "Course purchased successfully" });
+    if (updatedUser) {
+      return res.json({
+        message: "Purchase complete!",
+      });
+    }
+    return res.status(404).json({ error: "User not found." });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.get("/purchasedCourses", userMiddleware, async (req, res) => {
+  const username = req.headers.username;
   const user = await User.findOne({ username: username });
   const courses = await Course.find({
     _id: {
       $in: user.purchasedCourses,
     },
   });
-
-  if (user) {
-    res.status(201).json({ purchasedCourses: user });
-  }
+  res.status(201).json({
+    courses: courses,
+  });
 });
 
 module.exports = router;
