@@ -2,7 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const userMiddleware = require("../middleware/user");
 const jwt = require("jsonwebtoken");
-const { User } = require("../db");
+const { User, Course } = require("../db");
 const JWT_SECRET = "JsonWebTokenPassword@123";
 
 // User Routes
@@ -40,7 +40,7 @@ router.post("/signin", async (req, res) => {
       password: password,
     });
     if (user) {
-      const token = jwt.sign(username, JWT_SECRET);
+      const token = jwt.sign({ username }, JWT_SECRET);
       user.token = token;
       await user.save();
       return res.status(403).json({ token: token });
@@ -50,16 +50,54 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.get("/courses", (req, res) => {
-  // Implement listing all courses logic
+router.get("/courses", async (req, res) => {
+  try {
+    const courses = await Course.find({});
+    res.status(200).json({ courses: courses });
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-router.post("/courses/:courseId", userMiddleware, (req, res) => {
-  // Implement course purchase logic
+router.post("/courses/:courseId", userMiddleware, async (req, res) => {
+  const courseId = req.params.courseId;
+  const username = req.username;
+  console.log(courseId);
+  try {
+    console.log("try");
+    const user = await User.findOneAndUpdate(
+      { username: username },
+      { $push: { purchasedCourses: courseId } },
+      { new: true }
+    );
+
+    console.log(user);
+    if (user) {
+      return res.json({
+        message: "Purchase complete!",
+      });
+    }
+
+    return res.status(404).json({ error: "User not found." });
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-router.get("/purchasedCourses", userMiddleware, (req, res) => {
-  // Implement fetching purchased courses logic
+router.get("/purchasedCourses", userMiddleware, async (req, res) => {
+  const username = req.username;
+  const user = await User.findOne({ username: username });
+  console.log(user.purchasedCourses);
+  const courses = await Course.find({
+    _id: {
+      $in: user.purchasedCourses,
+    },
+  });
+
+  console.log("Courses:", courses);
+  res.status(201).json({
+    courses: courses,
+  });
 });
 
 module.exports = router;

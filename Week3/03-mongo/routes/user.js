@@ -41,7 +41,7 @@ router.post("/courses/:courseId", userMiddleware, async (req, res) => {
 
     const updatedUser = await User.findOneAndUpdate(
       { username: username },
-      { $push: { purchesedCourses: courseId } }
+      { $push: { purchasedCourses: courseId } }
     );
 
     if (updatedUser) {
