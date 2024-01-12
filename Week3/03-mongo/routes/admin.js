@@ -47,7 +47,7 @@ router.post("/courses", adminMiddleware, async (req, res) => {
 
 router.get("/courses", adminMiddleware, async (req, res) => {
   try {
-    const courses = await Course.find({}).lean();
+    const courses = await Course.find({});
     res.status(200).json({ courses: courses });
   } catch (error) {
     console.error(error);
