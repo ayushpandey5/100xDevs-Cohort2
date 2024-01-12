@@ -87,7 +87,6 @@ router.post("/courses/:courseId", userMiddleware, async (req, res) => {
 router.get("/purchasedCourses", userMiddleware, async (req, res) => {
   const username = req.username;
   const user = await User.findOne({ username: username });
-  console.log(user.purchasedCourses);
   const courses = await Course.find({
     _id: {
       $in: user.purchasedCourses,
