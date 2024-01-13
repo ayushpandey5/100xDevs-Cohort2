@@ -12,10 +12,9 @@
 
         const result = document.getElementById("result");
         const response = await fetch(
-          `https://sum-server.100xdevs.com/sum?a=${num1}&b=${num2}`
+          `http://localhost:3000/sum?num1=${num1}&num2=${num2}`
         );
         const sum = await response.text();
-
         result.innerHTML = sum;
       }
     </script>
