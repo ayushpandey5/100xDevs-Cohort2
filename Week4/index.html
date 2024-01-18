@@ -1,61 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
 
-<head>
-  <script>
-    let globalId = 1;
-    let todoState = [];
-    let oldTodoState = [];
+    <script>
+      let globalId = 1;
 
-    function addTodoToDom() {
-      
-    }
+      // Naive Way
+      // function addTodo() {
+      //   const title = document.getElementById("title").value;
+      //   const description = document.getElementById("description").value;
+      //   const originalTodos = document.getElementById("todos").innerHTML;
+      //   document.getElementById("todos").innerHTML =
+      //     originalTodos +
+      //     `<div>
+      //     <p>${title}</p>
+      //     <p>${description}</p>
+      //     <button>Mark as Comlete</button>
+      //   </div>`;
+      // }
 
-    function removeTodoFromDom(todo) {
-      
-    }
+      function markAsDone(id) {
+        const parent = document.getElementById(id);
+        parent.children[2].innerHTML = "Done!";
+      }
 
-    function updateTodoInDom(oldTodo, newTodo) {
-        
-    }
+      function createChild(title, description, id) {
+        const parentDiv = document.createElement("div");
+        const titleP = document.createElement("p");
+        titleP.innerHTML = title;
+        const descriptionP = document.createElement("p");
+        descriptionP.innerHTML = description;
+        const doneButton = document.createElement("button");
+        doneButton.innerHTML = "Mark as done!";
 
-    function updateState(newTodos) {
-      // calculate the diff b/w newTodos and oldTodos.
-      // More specifically, find out what todos are - 
-      // 1. added
-      // 2. deleted
-      // 3. updated
-      const added = [];
-      const deleted = [];
-      const updated = [];
-      // calculate these 3 arrays
-      // call addTodo, removeTodo, updateTodo functions on each of the
-      // elements
-      oldTodoState = newTodos;
-    }
+        doneButton.setAttribute("onclick", `markAsDone(${id})`);
+        parentDiv.appendChild(titleP);
+        parentDiv.appendChild(descriptionP);
+        parentDiv.appendChild(doneButton);
+        parentDiv.setAttribute("id", id);
 
-    function addTodo() {
-      const title = document.getElementById("title").value;
-      const description = document.getElementById("description").value;
-      todoState.push({
-        title: title,
-        description: description,
-        id: globalId++,
-      })
-      updateState(todoState);
-    }
-  </script>
-</head>
+        return parentDiv;
+      }
 
-<body>
-  <input type="text" id="title" placeholder="Todo title"></input> <br /><br />
-  <input type="text" id="description" placeholder="Todo description"></input> <br /><br />
-  <button onclick="addTodo()">Add todo</button>
-  <br /> <br />
+      function addTodo() {
+        const title = document.getElementById("title").value;
+        const description = document.getElementById("description").value;
 
-  <div id="todos">
+        const parentDiv = document.getElementById("todos");
+        parentDiv.appendChild(createChild(title, description, globalId++));
+      }
+    </script>
+  </head>
+  <body>
+    <input type="text" id="title" placeholder="title" /> <br />
+    <br />
+    <input type="text" id="description" placeholder="description" /> <br />
+    <br />
+    <button onclick="addTodo()">Add Todo</button>
 
-  </div>
-</body>
-
+    <div id="todos"></div>
+  </body>
 </html>
