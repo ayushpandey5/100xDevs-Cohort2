@@ -59,13 +59,19 @@
       const title = document.getElementById("title").value;
       const description = document.getElementById("description").value;
 
-      const parentDiv = document.getElementById("todos");
-      parentDiv.appendChild(createChild(title, description, globalId++));
+      todoState.push({
+        title: title,
+        description: description,
+        id: globalId++,
+      });
+      updateState(todoState);
     }
 
     //Using State
     function updateDOMwithState(state) {
       const parent = document.getElementById("todos");
+
+      //Emptying the DOM from first. Not tbe best way to do this.
       parent.innerHTML = " ";
       for (let i = 0; i < state.length; i++) {
         const child = createChild(
@@ -79,6 +85,7 @@
 
     updateDOMwithState([]);
 
+    // Fetches and updates DOM every 5 second from a backend giving Todos in JSON.
     window.setInterval(async function () {
       const res = await fetch("https://sum-server.100xdevs.com/todos");
       const json = await res.json();
