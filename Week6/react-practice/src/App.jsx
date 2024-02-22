@@ -30,9 +30,14 @@ function App() {
       {todos.map((todo) => <Todo title={todo.title} key={todo.title} description={todo.description}></Todo>
       )} */}
 
-      <CardWrapper>
+      <CardWrapper> 
         <TextComponent />
-        <Header title="Hello"></Header>
+        <TextComponent />
+      </CardWrapper>
+
+      <CardWrapper> 
+        <TextComponent />
+        <TextComponent />
       </CardWrapper>
     </>
   )
