@@ -1,5 +1,5 @@
-export default function CardWrapper({innerComponent: InnerComponent}) {
+export default function CardWrapper({children}) {
   return (
-    <div style={{border: "2px solid black"}}><InnerComponent /></div>
+    <div style={{border: "2px solid black"}}>{children}</div>
   )
 }

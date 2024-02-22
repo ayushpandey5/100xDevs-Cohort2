@@ -30,7 +30,10 @@ function App() {
       {todos.map((todo) => <Todo title={todo.title} key={todo.title} description={todo.description}></Todo>
       )} */}
 
-      <CardWrapper innerComponent = {TextComponent}></CardWrapper>
+      <CardWrapper>
+        <TextComponent />
+        <Header title="Hello"></Header>
+      </CardWrapper>
     </>
   )
 }
