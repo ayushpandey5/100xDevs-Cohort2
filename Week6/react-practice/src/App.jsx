@@ -6,12 +6,14 @@ import Todo from "./components/Todo.jsx";
 import CardWrapper from "./components/CardWrapper.jsx";
 import TextComponent from "./components/TextComponent.jsx";
 import SingleTodo from "./components/SingleTodo.jsx";
+import CallbackComponent from "./components/CallbackComponent.jsx";
+import { useCallback } from "react";
 
 
 function App() {
-  const [id, setId] = useState(0);
+  // const [id, setId] = useState(0);
   const [count,setCount] = useState(0)
-  const [input, setInput] = useState(1)
+  // const [input, setInput] = useState(1)
   // const [todos, setTodos] = useState([]); // Initialize todos to an empty array
   // useEffect(() => {
   //   fetch("https://sum-server.100xdevs.com/todos").then(async (res) => {
@@ -28,14 +30,14 @@ function App() {
   // }
 
 
-    let sumFunc = useMemo(() => {
-      console.log("memo called")
-      let sum = 0
-      for(let i = 0; i <= input; i++){
-        sum = sum + i
-      }
-      return sum
-    }, [input])
+    // let sumFunc = useMemo(() => {
+    //   console.log("memo called")
+    //   let sum = 0
+    //   for(let i = 0; i <= input; i++){
+    //     sum = sum + i
+    //   }
+    //   return sum
+    // }, [input])
 
     // console.log("sum count start")
     //   let sum = 0
@@ -43,18 +45,26 @@ function App() {
     //     sum = sum + i
     //   }
    
+
+    let a = 10;
+
+    let sum = useCallback(()=>{
+      console.log("Re-renders")
+    }, []) 
  
   return (
     <>
 
-    {/* if the page re-renders the loop has to run again. So use useMemo to not re-call the function */}
-    <input type="number" onChange={(e) => {
-      setInput(e.target.value)
-    }}/>
-    <p>Sum from 1 to {input} is {sumFunc}</p>
-    <button onClick={() => {
+    {/* if the page re-renders the loop has to run again. So use useMemo to not re-call the function */
+    /* <input type="number" onChange={(e) => {
+      
+    }}/> */
+    /* <button onClick={() => {
       setCount(count + 1)
-    }}>Count {count}</button>
+    }}>Count {count}</button> */}
+
+
+    <CallbackComponent cb={sum}></CallbackComponent>
 
     {/* <button onClick={() => {
       setId(1)
