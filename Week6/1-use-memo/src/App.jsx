@@ -9,8 +9,8 @@ function App() {
     <>
       {/* <Assignment1 /> */}
       {/* <Assignment2 /> */}
-      <Assignment2_2 />
-      {/* <Assignment3 /> */}
+      {/* <Assignment2_2 /> */}
+      <Assignment3 />
     </>
   )
 }
