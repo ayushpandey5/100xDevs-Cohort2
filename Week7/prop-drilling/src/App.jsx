@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import './App.css'
 //import {CountContext} from './Context'
-import { countAtom } from './store/atoms/count'
+import { countAtom, countSelector } from './store/atoms/count'
 import { useSetRecoilState, useRecoilValue, RecoilRoot } from 'recoil'
 
 
@@ -25,6 +25,7 @@ function Count(){
   return <>
     <RenderCount />
     <Buttons/>
+    <OddEven />
   </>
 }
 
@@ -47,8 +48,16 @@ function Buttons(){
     }}>Increase</button>
 
     <button onClick={() => {
-        setCount(count => count+1)
+        setCount(count => count-1)
     }}>Decrease</button>
+  </>
+}
+
+function OddEven(){
+  const isEven = useRecoilValue(countSelector)
+  const OddEven = (isEven) ? "Even" : "Odd"
+  return <>
+    <p>Count is {OddEven}</p>
   </>
 }
 
