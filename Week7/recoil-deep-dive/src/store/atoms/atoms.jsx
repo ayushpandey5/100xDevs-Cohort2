@@ -9,3 +9,15 @@ export const navAtom = atom({
         messages: [1,2,3,4,5]
     }
 })
+
+export const navSelector = selector({
+    key: "navSelector",
+    get: ({get}) => {
+        const navObject = get(navAtom)
+        const total = Object.values(navObject).reduce((accumulator, item) => {
+            return item.length + accumulator
+        },0)
+        console.log(total)
+        return total
+    }
+})
