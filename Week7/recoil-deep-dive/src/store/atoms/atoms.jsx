@@ -1,4 +1,5 @@
 import {atom, selector} from 'recoil'
+import axios from 'axios'
 
 export const navAtom = atom({
     key: "networkAtom",
@@ -10,6 +11,17 @@ export const navAtom = atom({
     }
 })
 
+export const fetchNavAtom = atom({
+    key: "fetchNavAtom",
+    default: selector({
+        key: "fetchNavSelector",
+        get: async () => {
+            const res = await axios.get("https://sum-server.100xdevs.com/notifications")
+            return res.data
+        }
+    })
+})
+
 export const navSelector = selector({
     key: "navSelector",
     get: ({get}) => {
@@ -17,7 +29,6 @@ export const navSelector = selector({
         const total = Object.values(navObject).reduce((accumulator, item) => {
             return item.length + accumulator
         },0)
-        console.log(total)
         return total
     }
 })
