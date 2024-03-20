@@ -21,7 +21,6 @@ export default function Navbar() {
     // //const total = useSetRecoilState(navSelector)
     const total = networkCount + jobsCount + notificationCount + messagesCount
 
-    console.log(total)
 
 
   return (

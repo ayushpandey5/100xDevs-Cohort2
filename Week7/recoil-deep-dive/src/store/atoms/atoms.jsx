@@ -1,5 +1,8 @@
 import {atom, selector} from 'recoil'
 import axios from 'axios'
+import { atomFamily } from 'recoil'
+import { TODOS } from '../../todos'
+import { selectorFamily } from 'recoil'
 
 export const navAtom = atom({
     key: "networkAtom",
@@ -21,6 +24,29 @@ export const fetchNavAtom = atom({
         }
     })
 })
+
+//use of atomFamily to dynamically create new atom for each Todos.
+export const todosAtomFamily = atomFamily({
+    key: "todosAtomFamily",
+    default: id => {
+        return TODOS.find(todo => todo.id === id)
+    }
+})
+
+
+//use selectorFamily inside atomFamily to get async data from backend
+export const todosSelectorFamily = atomFamily({
+    key: "todosAtomFamily",
+    default: selectorFamily({
+        key: "todosSelectorFamily",
+        get: (id) => async ({get}) => {
+            const res = await axios.get(`https://sum-server.100xdevs.com/todo?id=${id}`)
+            return res.data.todo
+        } 
+    })
+    
+})
+
 
 export const navSelector = selector({
     key: "navSelector",
