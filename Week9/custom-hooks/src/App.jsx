@@ -3,7 +3,7 @@ import axios from 'axios'
 import './App.css'
 
 function App() {
-  const {todos, loading} = useTodos();
+  const {todos, loading} = useTodos(5);
 
   return (
     <>
@@ -25,7 +25,7 @@ function useTodos(n){
       }).then(() => {
         setLoading(false)
       })
-    },5000)
+    },n * 100)
   }, [])
 
   return {todos, loading}
