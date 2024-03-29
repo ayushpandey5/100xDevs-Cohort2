@@ -18,7 +18,7 @@ function useTodos(n){
 
 
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       axios.get("https://sum-server.100xdevs.com/todos")
       .then(res => {
         setTodos(res.data.todos);
@@ -26,7 +26,11 @@ function useTodos(n){
         setLoading(false)
       })
     },n * 100)
-  }, [])
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [n])
 
   return {todos, loading}
 }
