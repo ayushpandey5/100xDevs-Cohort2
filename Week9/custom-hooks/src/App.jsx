@@ -3,26 +3,29 @@ import axios from 'axios'
 import './App.css'
 
 function App() {
-  const todos = useTodos();
+  const {todos, loading} = useTodos();
 
   return (
     <>
-      {todos.map(todo => <Todo key={todo._id} todo={todo}/>)}
+      {loading ? <>Loading....</> : todos.map(todo => <Todo key={todo._id} todo={todo}/>)}
     </>
   )
 }
 
 function useTodos(){
   const [todos, setTodos] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     axios.get("https://sum-server.100xdevs.com/todos")
       .then(res => {
         setTodos(res.data.todos);
+      }).then(() => {
+        setLoading(false)
       })
   }, [])
 
-  return todos
+  return {todos, loading}
 }
 
 function Todo({todo}){
