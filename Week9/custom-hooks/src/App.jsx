@@ -3,46 +3,69 @@ import axios from 'axios'
 import './App.css'
 
 function App() {
-  const {todos, loading} = useTodos(5);
+  // const {todos, loading} = useTodos(5);
+  const online = useIsOnline();
+
 
   return (
     <>
-      {loading ? <>Loading....</> : todos.map(todo => <Todo key={todo._id} todo={todo}/>)}
+      {online ? <>You are online</> : <>You are offline</>}
+      
+      {/* {loading ? <>Loading....</> : todos.map(todo => <Todo key={todo._id} todo={todo}/>)} */}
     </>
   )
 }
 
-function useTodos(n){
-  const [todos, setTodos] = useState([])
-  const [loading, setLoading] = useState(true)
+// function useTodos(n){
+//   const [todos, setTodos] = useState([])
+//   const [loading, setLoading] = useState(true)
 
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      axios.get("https://sum-server.100xdevs.com/todos")
-      .then(res => {
-        setTodos(res.data.todos);
-      }).then(() => {
-        setLoading(false)
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       axios.get("https://sum-server.100xdevs.com/todos")
+//       .then(res => {
+//         setTodos(res.data.todos);
+//       }).then(() => {
+//         setLoading(false)
+//       })
+//     },n * 100)
+
+//     return () => {
+//       clearInterval(interval)
+//     }
+//   }, [n])
+
+//   return {todos, loading}
+// }
+
+// function Todo({todo}){
+//   return <>
+//     {todo.title}
+//     <br />
+//     {todo.description}
+//     <br />
+//     <br />
+//   </>
+// }
+
+function useIsOnline() {
+
+  const [online, setOnline] = useState(window.navigator.onLine)
+
+  useEffect(()=>{
+      window.addEventListener('online', () => {
+          setOnline(true)
       })
-    },n * 100)
 
-    return () => {
-      clearInterval(interval)
-    }
-  }, [n])
+      window.addEventListener('offline', () => {
+          setOnline(true)
+  })
+  }, [])
+ 
 
-  return {todos, loading}
+return online
 }
 
-function Todo({todo}){
-  return <>
-    {todo.title}
-    <br />
-    {todo.description}
-    <br />
-    <br />
-  </>
-}
 
 export default App
