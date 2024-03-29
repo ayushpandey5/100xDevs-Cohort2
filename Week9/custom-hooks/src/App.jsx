@@ -12,17 +12,20 @@ function App() {
   )
 }
 
-function useTodos(){
+function useTodos(n){
   const [todos, setTodos] = useState([])
   const [loading, setLoading] = useState(true)
 
+
   useEffect(() => {
-    axios.get("https://sum-server.100xdevs.com/todos")
+    setInterval(() => {
+      axios.get("https://sum-server.100xdevs.com/todos")
       .then(res => {
         setTodos(res.data.todos);
       }).then(() => {
         setLoading(false)
       })
+    },5000)
   }, [])
 
   return {todos, loading}
