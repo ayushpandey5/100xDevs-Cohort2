@@ -24,3 +24,19 @@ const doSomething = () => {
 function isLegal(user) {
     return user.age >= 18 ? true : false;
 }
+//Class to implement interface
+class Employee {
+    firstName;
+    lastName;
+    age;
+    email;
+    constructor(firstName, lastName, age, email) {
+        this.firstName = firstName,
+            this.lastName = lastName,
+            this.email = email,
+            this.age = age;
+    }
+    greet(phrase) {
+        console.log(`${phrase}, ${this.firstName}`);
+    }
+}

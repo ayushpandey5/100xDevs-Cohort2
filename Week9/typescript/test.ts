@@ -29,10 +29,31 @@ interface User{
     firstName: string,
     lastName: string,
     age: number,
-    email: string
+    email: string,
+    greet(phrase: string): void
 }
 
 
 function isLegal(user:User):boolean {
     return user.age >= 18 ? true : false
+}
+
+
+//Class to implement interface
+class Employee implements User{
+    firstName: string
+    lastName: string
+    age: number
+    email: string
+
+    constructor(firstName:string,lastName:string,age:number,email:string){
+        this.firstName = firstName,
+        this.lastName = lastName,
+        this.email = email,
+        this.age = age
+    }
+
+    greet(phrase: string): void {
+        console.log(`${phrase}, ${this.firstName}`) 
+    }
 }
