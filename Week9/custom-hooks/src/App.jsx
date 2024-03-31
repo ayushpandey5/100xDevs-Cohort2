@@ -7,16 +7,16 @@ function App() {
   // const online = useIsOnline();
   //const pointer = useMousePointer();
   //const dimension = useDimensions();
-
-  const [count, setCount] =useState(0);
-
-  useInterval(() => {
-      setCount(count => count + 1)
-  }, 1000)
+  const [value, setValue] = useState("")
+  const debouncedValue = useDebounce(value, 500)
 
   return (
     <>
-      Timer is at {count}
+
+      <input type="text" onChange={e => setValue(e.target.value)}/>
+      <br />
+      Debounced value is {debouncedValue}
+      {/* Timer is at {count} */}
       {/* <p>Your mouse position in X: {pointer.x}, and Y: {pointer.y}</p> */}
       {/* <p>Your height and width is H: {dimension.width}, and W: {dimension.height}</p> */}
 
@@ -121,6 +121,21 @@ function useInterval(func, sec){
     const interval = setInterval(func,sec)
     return () => clearInterval(interval)
   }, [func, sec])
+}
+
+function useDebounce(value, sec){
+  const [debouncedValue, setDebouncedValue] = useState(value)
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+        //api call, file io whatever to debounce
+        setDebouncedValue(value)
+    }, sec)
+
+    return () => clearTimeout(timeout)
+
+  }, [value, sec])
+
+  return debouncedValue
 }
 
 
