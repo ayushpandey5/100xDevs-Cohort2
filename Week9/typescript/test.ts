@@ -19,5 +19,20 @@ function delayedCall(fn: () => void){
     setTimeout(fn, 1000)
 }
 
+// With void return, you can still fuck up
+const doSomething: () => void = () => {
+    console.log("")
+    return 5
+}
+
+interface User{
+    firstName: string,
+    lastName: string,
+    age: number,
+    email: string
+}
 
 
+function isLegal(user:User):boolean {
+    return user.age >= 18 ? true : false
+}

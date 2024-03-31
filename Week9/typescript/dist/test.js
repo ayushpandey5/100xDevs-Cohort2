@@ -16,3 +16,11 @@ console.log(sum(1, 2));
 function delayedCall(fn) {
     setTimeout(fn, 1000);
 }
+// With void return, you can still fuck up
+const doSomething = () => {
+    console.log("");
+    return 5;
+};
+function isLegal(user) {
+    return user.age >= 18 ? true : false;
+}
