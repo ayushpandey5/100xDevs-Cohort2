@@ -6,14 +6,19 @@ function App() {
   // const {todos, loading} = useTodos(5);
   // const online = useIsOnline();
   //const pointer = useMousePointer();
-  const dimension = useDimensions();
+  //const dimension = useDimensions();
 
+  const [count, setCount] =useState(0);
+
+  useInterval(() => {
+      setCount(count => count + 1)
+  }, 1000)
 
   return (
     <>
-
+      Timer is at {count}
       {/* <p>Your mouse position in X: {pointer.x}, and Y: {pointer.y}</p> */}
-      <p>Your height and width is H: {dimension.width}, and W: {dimension.height}</p>
+      {/* <p>Your height and width is H: {dimension.width}, and W: {dimension.height}</p> */}
 
       {/* {online ? <>You are online</> : <>You are offline</>} */}
   
@@ -109,6 +114,14 @@ const useDimensions = () => {
   return dimension
 }
 
+
+
+function useInterval(func, sec){
+  useEffect(() => {
+    const interval = setInterval(func,sec)
+    return () => clearInterval(interval)
+  }, [func, sec])
+}
 
 
 export default App
