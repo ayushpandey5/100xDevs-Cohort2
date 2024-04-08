@@ -27,6 +27,9 @@ export interface Env {
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		return new Response('Hello World!');
+		console.log(request.headers)
+		console.log(request.method)
+		console.log(request.url)
+		return new Response()
 	},
 };
