@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { describe } from 'node:test'
 const prisma = new PrismaClient()
 
 interface User{
@@ -80,13 +81,36 @@ interface User{
 
 // addTodo(1)
 
-async function getTodosWithUser(userId:any) {
+// async function getTodosWithUser(userId:any) {
+//     const res = await prisma.todo.findMany({
+//         where: {
+//             userId:userId
+//         }
+//     })
+//     console.log(res)
+// }
+
+// getTodosWithUser(1)
+
+// Join
+
+async function getTodoAndUserDetails(userId:number) {
     const res = await prisma.todo.findMany({
         where: {
-            userId:userId
+            userId: userId
+        },
+        select: {
+            //user: true // for whole user object
+            user: {
+                select: {
+                    firstName:true,
+                }
+            },
+            title: true,
+            description: true
         }
     })
     console.log(res)
 }
 
-getTodosWithUser(1)
+getTodoAndUserDetails(1)
