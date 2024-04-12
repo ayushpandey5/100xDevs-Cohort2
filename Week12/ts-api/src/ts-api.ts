@@ -68,3 +68,15 @@ userMap.set("def", {name:"NewUser", age: 19})
 
 console.log(userMap)
 console.log(userMap.get('abc'))
+
+
+// Exclude
+type EventType = 'click' | 'scroll' | 'mousemove'
+type ExcludeEvent = Exclude<EventType, "scroll">; //excludes scroll and only picks click and mouse
+
+const handleEvent = (event:ExcludeEvent) => {
+    console.log(`Event: ${event}`)
+}
+handleEvent("click")
+handleEvent("mousemove")
+//console.log(handleEvent("scroll")) // this throws error
