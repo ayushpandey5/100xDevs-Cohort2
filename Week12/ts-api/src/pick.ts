@@ -45,3 +45,26 @@ const config:Readonly<ReadConfig> = {
 
 //config.apiKey = "asdsad"  => cannot change properties unlike const objects as this is readonly
 
+
+// Records and Map
+interface RecordUser {
+    name: string,
+    age: number
+}
+
+// have key string to reach field, just like HashMap
+type UserRec = Record<string,RecordUser>
+
+const users:UserRec = {
+    'abc': {name: "Ayush", age: 24},
+    'def': {name: "Ayush", age: 24}
+}
+
+// Map
+const userMap = new Map<string, RecordUser>();
+
+userMap.set("abc", {name:"Ayush", age: 24})
+userMap.set("def", {name:"NewUser", age: 19})
+
+console.log(userMap)
+console.log(userMap.get('abc'))
