@@ -1,35 +1,43 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
 
 export interface Env {
-	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-	// MY_KV_NAMESPACE: KVNamespace;
-	//
-	// Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-	// MY_DURABLE_OBJECT: DurableObjectNamespace;
-	//
-	// Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-	// MY_BUCKET: R2Bucket;
-	//
-	// Example binding to a Service. Learn more at https://developers.cloudflare.com/workers/runtime-apis/service-bindings/
-	// MY_SERVICE: Fetcher;
-	//
-	// Example binding to a Queue. Learn more at https://developers.cloudflare.com/queues/javascript-apis/
-	// MY_QUEUE: Queue;
+	DATABASE_URL:string
 }
+import {Hono, Next} from 'hono'
+import { PrismaClient } from '@prisma/client/edge'
+import { withAccelerate } from '@prisma/extension-accelerate'
 
-export default {
-	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		console.log(request.headers)
-		console.log(request.method)
-		console.log(request.url)
-		return new Response()
-	},
-};
+import { env } from 'hono/adapter'
+
+const app = new Hono()
+
+app.get('/', async(c) => {
+	const body: {
+		name: string,
+		email: string,
+	} = await c.req.json()
+
+	const {DATABASE_URL} = env<{DATABASE_URL: string}>(c)
+
+	const prisma = new PrismaClient({
+		datasourceUrl: DATABASE_URL
+	}).$extends(withAccelerate())
+
+	
+	await prisma.user.create({
+		data: {
+			name: body.name,
+			email: body.email,
+		}
+	})
+
+	const res = await prisma.user.findMany({
+		cacheStrategy: { ttl: 60 },
+	}).withAccelerateInfo();
+
+	console.log(JSON.stringify(res))
+
+
+	return new Response(`request: ${res}`)
+})
+
+export default app;

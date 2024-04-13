@@ -3,6 +3,9 @@ main = "src/index.ts"
 compatibility_date = "2024-04-05"
 compatibility_flags = ["nodejs_compat"]
 
+[vars]
+DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMmNkOTgxOTItZTM3OC00M2ZlLTg2ZTUtNWIyM2FmNTZiYWZlIiwidGVuYW50X2lkIjoiOTYzY2RiZDU2OGFkZTk5ZGVkNWYzZDkxNDU3YmM4YTZhYzc3ODIzODI4Y2E1ZWY1NWYwY2ZhYmUxZDMxNmNhMyIsImludGVybmFsX3NlY3JldCI6IjFmNGE5NjlmLTg1MDYtNDA1NS04MzlkLTUwYTU3M2M5ZGI3NyJ9.s-1lLD8oh9xPosUonjPwTFZzE45U_njdRrU1qCaVyQ8"
+
 # Variable bindings. These are arbitrary, plaintext strings (similar to environment variables)
 # Note: Use secrets to store sensitive data.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
